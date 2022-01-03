@@ -1,4 +1,5 @@
 import serial as pys
+from typing import List
 from time import sleep
 from .instruction import Instruction, load_instructions
 from ArdLink import instruction
@@ -55,12 +56,9 @@ class Device(pys.Serial):
 
     """
 
-    minDelay = 0.05 # min delay between instruction execution
+    minDelay = 0.05  # min delay between instruction execution
 
     def __init__(self, *args, **kwargs):
-
-
-        
 
         super().__init__(*args, **kwargs)
 
@@ -73,7 +71,7 @@ class Device(pys.Serial):
 
         Returns:
             Response: response data if requested
-        """        
+        """
 
         self.write(instruction.bytes)
 
@@ -86,8 +84,10 @@ class Device(pys.Serial):
         else:
             sleep(self.minDelay)
 
-    def write_routine(self, routine, get_response: bool = False) -> Response:
-        """[summary]
+    def write_routine(
+        self, routine: List[Instruction], get_response: bool = False
+    ) -> Response:
+        """Write a routine to the instruction buffer for later execution
 
         Args:
             routine ([Instruction]): set of instructions to execute
@@ -96,7 +96,7 @@ class Device(pys.Serial):
 
         Returns:
             Response: Response: response data if requested
-        """        
+        """
 
         routine_bytes = [  # caution, these are technically ints
             byte for instr in routine for byte in instr.bytes
@@ -104,8 +104,8 @@ class Device(pys.Serial):
 
         for n, b in enumerate(routine_bytes):
             self.execute(
-                instructions['Set'](n + INSTR_BUFFER_OFFSET, b)
-            , get_response=False)  # Set word at specified address
+                instructions["Set"](n + INSTR_BUFFER_OFFSET, b), get_response=False
+            )  # Set word at specified address
 
         if get_response:
 
@@ -118,5 +118,5 @@ class Device(pys.Serial):
 
         Returns:
             Response: Response: response data if requested
-        """        
-        return self.execute(instructions['Set'](0x0001, 0x1), *args, **kwargs)
+        """
+        return self.execute(instructions["Set"](0x0001, 0x1), *args, **kwargs)

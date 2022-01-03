@@ -24,26 +24,26 @@ def device(request):
     # teardown
     comms.close()
 
-     
+
 def test_temp_write(device):
-    # Most basic function to test connection. 
+    # Most basic function to test connection.
     # Write char to temp A then print it out.
 
     device.execute(al.Set(0x4012, 0x61))
     response = device.execute(al.PrintChar(0x4012), get_response=True)
 
-    assert response.str == 'a'
+    assert response.str == "a"
 
 
 def test_data_buffer(device):
     # test write/read of data buffer
 
-    data = 'abc'
+    data = "abc"
 
-    for i , char in enumerate(data):
+    for i, char in enumerate(data):
         device.execute(al.Set(al.device.DATA_BUFFER_OFFSET + i, ord(char)))
 
-    for i , char in enumerate(data):
+    for i, char in enumerate(data):
         device.execute(al.PrintChar(al.device.DATA_BUFFER_OFFSET + i))
 
     response = device.execute(al.NOP(), get_response=True)
@@ -53,10 +53,12 @@ def test_data_buffer(device):
 def test_instr_buffer(device):
     # test write/read/execution of data buffer
 
-    device.write_routine([
-        al.Millis(),
-        al.PrintChar(0x0010),
-        ])
+    device.write_routine(
+        [
+            al.Millis(),
+            al.PrintChar(0x0010),
+        ]
+    )
 
     resp1 = device.run_routine(get_response=True).bytes
 

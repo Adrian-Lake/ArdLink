@@ -6,9 +6,11 @@ from pathlib import Path
 def instr_type_call(self):
     pass
 
+
 def instr_type_one_param(self, parameter):
     self.p1 = parameter
     self.p2 = 0
+
 
 def instr_type_two_param(self, parameter_1, parameter_2):
     self.p1 = parameter_1
@@ -25,7 +27,7 @@ class Instruction:
     """Class for converting individual instructions to bytecode
     for execution or storage.
 
-    """    
+    """
 
     # default class attributes
     op = 0
@@ -39,9 +41,8 @@ class Instruction:
         self.p2 = parameter_2
 
     @staticmethod
-    def encode_bytes(data: int, byteorder:str='little') -> bytes:
-        """Encoder to convert int data to bytes in correct endian.
-        """        
+    def encode_bytes(data: int, byteorder: str = "little") -> bytes:
+        """Encoder to convert int data to bytes in correct endian."""
 
         return data.to_bytes(2, byteorder)
 
@@ -54,18 +55,20 @@ class Instruction:
 
         Returns:
             bytes: instruction bytecode
-        """        
+        """
 
         instr_set = [self.op, self.p1, self.p2]
         # get endian spec
         endian = target.value.get("endian")
 
         # Fun list comprehension
-        instr_bytes = bytes([
-            byte
-            for instr in instr_set
-            for byte in self.encode_bytes(instr, byteorder=endian)
-        ])
+        instr_bytes = bytes(
+            [
+                byte
+                for instr in instr_set
+                for byte in self.encode_bytes(instr, byteorder=endian)
+            ]
+        )
 
         return instr_bytes
 
@@ -74,12 +77,12 @@ def instruction_factory(
     name: str = None,
     opcode: int = None,
     doc_string: str = "",
-    init_func = instr_type_two_param,
+    init_func=instr_type_two_param,
 ):
     """Factory for creating instruction classes for each opcode.
 
     Args:
-        name (str, optional): Class name. 
+        name (str, optional): Class name.
         opcode (int, optional): operation code.
         doc_string (str, optional): [description]. Defaults to "".
         init_func ([type], optional): [description]. Defaults to instr_type_two_param.
@@ -93,21 +96,23 @@ def instruction_factory(
     return {name: type(name, (Instruction,), attributes)}
 
 
-def load_instructions(source:str = None) -> dict:
-    """ Generate Instruction class set from source
+def load_instructions(source: str = None) -> dict:
+    """Generate Instruction class set from source
 
     In the future the output of this function should be cached.
 
     Args:
         source (str, optional): Source to parse opcodes from. Defaults to firmware\interpreter.h
 
-    
+
     Returns:
         dict: Instructions classes
     """
     if source is None:
         # read file
-        with open(Path(__file__).parent.joinpath("./firmware/interpreter.h"), "r") as fh:
+        with open(
+            Path(__file__).parent.joinpath("./firmware/interpreter.h"), "r"
+        ) as fh:
             source = fh.read()
 
     # flags for parsing header
@@ -117,7 +122,7 @@ def load_instructions(source:str = None) -> dict:
 
     # instruction definitions from header
     instruction_defs = []
-    
+
     # parse header file
     for n, line in enumerate(source.splitlines()):
 
