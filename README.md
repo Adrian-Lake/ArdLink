@@ -11,7 +11,7 @@ ArdLink is a runtime for Arduino IDE compatible microcontrollers and was created
 
 ## Why?
 
-I like working on hobby electronics, and as a result I have a few (to many) microcontrollers hanging around. Because of the variety of devices I had at hand, I wanted some common method of using them without any particular dependence on a build environment. Additionally, a significant portion of my application with these devices comes down to utilizing them for GPIO as controlled by a host computer. ArdLink is still in it's infancy, but I hope to allow more functionality to permit communication in standard protocols such as 1-Wire, I^2^C, etc as well as simplified programming from Python.
+I like working on hobby electronics, and as a result I have a few (too many) microcontrollers hanging around. Because of the variety of devices I had at hand, I wanted some common method of using them without any particular dependence on a build environment. Additionally, a significant portion of my application with these devices comes down to utilizing them for GPIO as controlled by a host computer. ArdLink is still in its infancy, but I hope to allow more functionality to permit communication in standard protocols such as 1-Wire, I^2^C, etc as well as simplified programming from Python.
 
 
 ## How?
